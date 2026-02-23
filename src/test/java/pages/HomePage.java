@@ -1,18 +1,16 @@
 package pages;
 
-import driver.DriverFactory;
-import hooks.Hooks;
+import core.base.BasePage;
+import core.config.ConfigReader;
+import core.utils.WaitUtils;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import java.time.Duration;
 import java.util.List;
 
-public class HomePage {
+public class HomePage extends BasePage {
 
-    WebDriver driver = DriverFactory.getDriver();
-    //WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    //private final By searchInput = By.id("x3364b");
 
     By searchInput = By.xpath("//input[@type='search'][@name='w']");
 
@@ -20,16 +18,13 @@ public class HomePage {
 
     By acceptButton = By.xpath("//button[contains(.,'Accept and continue')]");
 
-    public void openHomePage() {
-        driver.get("https://www.verbformen.ru/");
+    public void open() {
+        driver.get(ConfigReader.get("baseUrl"));
     }
 
-    public void enterWord(String word) {
-        WebElement input = driver.findElement(searchInput);
-        input.clear();
-        input.sendKeys(word);
-        input.submit();
-
+    public void search(String word) {
+        WaitUtils.waitForVisible(searchInput)
+                .sendKeys(word + Keys.ENTER);
         try {
             // Пауза 4000 миллисекунд (4 секунды)
             Thread.sleep(5000);
@@ -41,7 +36,7 @@ public class HomePage {
 
     private void handlePopupIfPresent() {
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        //WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 
         try {
             // если popup внутри iframe
@@ -71,7 +66,7 @@ public class HomePage {
 
     public boolean isRussianTranslationDisplayed() {
         //handlePopupIfPresent();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        //WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement translation = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(russianTranslation)
         );
@@ -82,15 +77,12 @@ public class HomePage {
         //handlePopupIfPresent();
         By transLoc = By.xpath("//span[contains(text(),'"+word+"')]");
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        //WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement translation = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(transLoc)
         );
         return translation.isDisplayed();
     }
 }
-
-
-
 
 

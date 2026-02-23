@@ -10,12 +10,12 @@ public class SearchSteps {
 
     @Given("User opens Verbformen homepage")
     public void open_homepage() {
-        homePage.openHomePage();
+        homePage.open();
     }
 
     @When("User enters word {string}")
     public void enter_word(String word) {
-        homePage.enterWord(word);
+        homePage.search(word);
     }
 
     @Then("Russian translation should be displayed")

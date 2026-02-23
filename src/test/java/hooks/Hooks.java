@@ -1,21 +1,24 @@
 package hooks;
 
-import driver.DriverFactory;
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import core.driver.DriverFactory;
+import core.driver.DriverManager;
+import core.utils.ScreenshotUtils;
+import io.cucumber.java.*;
 
 public class Hooks {
 
     @Before
-    public void setUp() {
+    public void setup() {
         DriverFactory.initDriver();
     }
 
     @After
-    public void tearDown() {
+    public void tearDown(Scenario scenario) {
+
+        if (scenario.isFailed()) {
+            ScreenshotUtils.takeScreenshot(scenario.getName());
+        }
+
         DriverFactory.quitDriver();
     }
 }
